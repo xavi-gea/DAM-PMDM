@@ -8,40 +8,27 @@ export default function App() {
   let [previousNumber,setPreviousNumber] = useState(0)
   let [pendingOperation,setPendingOperation] = useState("")
 
-  let [firstOperands, setFirstOperands] = useState([])
-  let [secondOperands, setSecondOperands] = useState([])
+  let [operands, setOperands] = useState([])
   let tempNumbers = [];
 
   function handleClear(){
 
     setCalContent("0")
-    setFirstOperands([])
-    setSecondOperands([])
+    setOperands([])
     setPendingOperation("");
   }
 
   function handleInputNumber(inputNumber){
 
-    var formatedNumber = formatNumber(inputNumber)
+    let formatedNumber = formatNumber(inputNumber)
 
     if (formatedNumber.length < 12) {
-      
-      if (pendingOperation == "") {
-      
-        tempNumbers = firstOperands;
-        tempNumbers.push(formatedNumber);
-        setFirstOperands(tempNumbers);
-    
-        setCalContent(firstOperands.join(""))
+
+      tempNumbers = operands;
+      tempNumbers.push(formatedNumber);
+      setOperands(tempNumbers);
   
-      }else{
-
-        tempNumbers = secondOperands;
-        tempNumbers.push(formatedNumber);
-        setSecondOperands(tempNumbers);
-
-        setCalContent(secondOperands.join(""))
-      }
+      setCalContent(operands.join(""))
     }
   }
 
@@ -55,6 +42,7 @@ export default function App() {
     let numberToOperate = parseFloat(calContent)
 
     setCalContent()
+    setOperands([])
     
     operation = operation.toLowerCase()
     let result = 0
@@ -105,10 +93,6 @@ export default function App() {
 
     }else if(operation == "equ"){
 
-      console.log("Equals");
-      console.log("valor de firstOperands: " + firstOperands)
-      console.log("valor de secondOperands: " + secondOperands)
-
       if (pendingOperation == "div") {
         
         result = (previousNumber / numberToOperate)
@@ -125,8 +109,6 @@ export default function App() {
         
         result = (previousNumber + numberToOperate)
       }
-
-      //setPendingOperation("")
 
     }else{
 
