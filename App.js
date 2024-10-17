@@ -9,13 +9,13 @@ export default function App() {
   let [pendingOperation,setPendingOperation] = useState("")
 
   let [operands, setOperands] = useState([])
-  let tempNumbers = [];
+  let tempNumbers = []
 
   function handleClear(){
 
     setCalContent("0")
     setOperands([])
-    setPendingOperation("");
+    setPendingOperation("")
   }
 
   function handleInputNumber(inputNumber){
@@ -24,9 +24,9 @@ export default function App() {
 
     if (formatedNumber.length < 12) {
 
-      tempNumbers = operands;
-      tempNumbers.push(formatedNumber);
-      setOperands(tempNumbers);
+      tempNumbers = operands
+      tempNumbers.push(formatedNumber)
+      setOperands(tempNumbers)
   
       setCalContent(operands.join(""))
     }
@@ -47,76 +47,39 @@ export default function App() {
     operation = operation.toLowerCase()
     let result = 0
 
-    if (operation == "sin") {
+    switch (operation) {
 
-      result = formatNumber(Math.sin(numberToOperate))
+      case "sin":   result = formatNumber(Math.sin(numberToOperate)); break;
+      case "cos":   result = formatNumber(Math.cos(numberToOperate)); break;
+      case "tan":   result = formatNumber(Math.tan(numberToOperate)); break;
+      case "deg":   result = formatNumber(numberToOperate * (180 / Math.PI)); break;
+      case "loge":  result = formatNumber(Math.log(numberToOperate)); break;
+      case "log10": result = formatNumber(Math.log10(numberToOperate)); break;
+      case "pi":    result = formatNumber(Math.PI); break;
+      case "rad":   result = formatNumber(numberToOperate * (Math.PI / 180)); break;
+      case "int":   result = formatNumber(1 / numberToOperate); break;
+      case "fac":   result = formatNumber(factorial(numberToOperate)); break;
+      case "sqr":   result = formatNumber(Math.sqrt(numberToOperate)); break;
 
-    }else if(operation == "cos"){
+      case "equ":
 
-      result = formatNumber(Math.cos(numberToOperate))
+        switch (pendingOperation) {
 
-    }else if(operation == "tan"){
-
-      result = formatNumber(Math.tan(numberToOperate))
-
-    }else if(operation == "deg"){
-
-      result = formatNumber((numberToOperate * (180 / Math.PI)))
-
-    }else if(operation == "loge"){
-
-      result = formatNumber(Math.log(numberToOperate))
-
-    }else if(operation == "log10"){
-
-      result = formatNumber(Math.log10(numberToOperate))
-
-    }else if(operation == "pi"){
-
-      result = formatNumber(Math.PI)
-
-    }else if(operation == "rad"){
-
-      result = formatNumber((numberToOperate * (Math.PI / 180)))
-
-    }else if(operation == "int"){
-
-      result = formatNumber(1 / numberToOperate)
-
-    }else if(operation == "fac"){
-
-      result = formatNumber(factorial(numberToOperate))
-
-    }else if(operation == "sqr"){
-
-      result = formatNumber(Math.sqrt(numberToOperate))
-
-    }else if(operation == "equ"){
-
-      if (pendingOperation == "div") {
+          case "div":  result = (previousNumber / numberToOperate); break;
+          case "mult": result = (previousNumber * numberToOperate); break;
+          case "sub":  result = (previousNumber - numberToOperate); break;
+          case "sum":  result = (previousNumber + numberToOperate); break;
+        }
         
-        result = (previousNumber / numberToOperate)
+      break;
 
-      } else if (pendingOperation == "mult") {
-        
-        result = (previousNumber * numberToOperate)
-
-      }else if (pendingOperation == "sub") {
-        
-        result = (previousNumber - numberToOperate)
-
-      }else if (pendingOperation == "sum") {
-        
-        result = (previousNumber + numberToOperate)
-      }
-
-    }else{
-
-      setPendingOperation(operation)
-      setPreviousNumber(numberToOperate)
+      default:
+        setPendingOperation(operation);
+        setPreviousNumber(numberToOperate);
+        break;
     }
 
-    result = result.toString();
+    result = formatNumber(result)
 
     if (result != "0") {
 
