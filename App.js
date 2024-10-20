@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Text, View, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 
 export default function App() {
 
@@ -74,35 +74,35 @@ export default function App() {
 
     switch (operation) {
 
-      case "sen": result = formatNumber(Math.sin(numberToOperate)); break;
-      case "cos": result = formatNumber(Math.cos(numberToOperate)); break;
-      case "tan": result = formatNumber(Math.tan(numberToOperate)); break;
-      case "deg": result = formatNumber(numberToOperate * (180 / Math.PI)); break;
-      case "ln":  result = formatNumber(Math.log(numberToOperate)); break;
-      case "log": result = formatNumber(Math.log10(numberToOperate)); break;
-      case "π":   result = formatNumber(Math.PI); break;
-      case "rad": result = formatNumber(numberToOperate * (Math.PI / 180)); break;
-      case "1/X": result = formatNumber(1 / numberToOperate); break;
-      case "!":   result = formatNumber(factorial(numberToOperate)); break;
-      case "√":   result = formatNumber(Math.sqrt(numberToOperate)); break;
-      case "C":   handleClear(); break;
+      case "sen": result = Math.sin(numberToOperate); break
+      case "cos": result = Math.cos(numberToOperate); break
+      case "tan": result = Math.tan(numberToOperate); break
+      case "deg": result = (numberToOperate * (180 / Math.PI)); break
+      case "ln":  result = Math.log(numberToOperate); break
+      case "log": result = Math.log10(numberToOperate); break
+      case "π":   result = Math.PI; break
+      case "rad": result = (numberToOperate * (Math.PI / 180)); break
+      case "1/X": result = (1 / numberToOperate); break
+      case "!":   result = factorial(numberToOperate); break
+      case "√":   result = Math.sqrt(numberToOperate); break
+      case "C":   handleClear(); break
 
       case "=":
 
         switch (pendingOperation) {
 
-          case "/":  result = (previousNumber / numberToOperate); break;
-          case "x": result = (previousNumber * numberToOperate); break;
-          case "-":  result = (previousNumber - numberToOperate); break;
-          case "+":  result = (previousNumber + numberToOperate); break;
+          case "/":  result = (previousNumber / numberToOperate); break
+          case "x":  result = (previousNumber * numberToOperate); break
+          case "-":  result = (previousNumber - numberToOperate); break
+          case "+":  result = (previousNumber + numberToOperate); break
         }
         
-      break;
+      break
 
       default:
-        setPendingOperation(operation);
-        setPreviousNumber(numberToOperate);
-        break;
+        setPendingOperation(operation)
+        setPreviousNumber(numberToOperate)
+        break
     }
 
     result = formatNumber(result)
@@ -131,11 +131,11 @@ export default function App() {
   }
 
   return (
-    <View style={{ justifyContent: 'center', alignSelf: "center", marginVertical: 80 }}>
-      <Text style={{ fontSize: 45, fontWeight: "bold" }}>Calculadora</Text>
+    <View style={STYLES.mainContainer}>
+      <Text style={STYLES.title}>Calculadora</Text>
       <View style={{ marginTop: 5 }}>
-        <View style={{ flexDirection: "row", marginBottom: 10, height: 70, width: 340, borderRadius: 4, borderWidth: 1 }}>
-          <Text style={{ fontSize: 50, textAlign: "right", flex: 1 }}>{calContent}</Text>
+        <View style={STYLES.calContentContainer}>
+          <Text style={STYLES.calContent}>{calContent}</Text>
         </View>
         {
           PRESSABLES.map((row, index) => (
@@ -145,7 +145,9 @@ export default function App() {
               {row.map((element, index) => (
 
                 <View key={index} style={{ padding: 3 }}>
-                  <Pressable onPress={() => handleInput(element)} style={{ borderRadius: 8, justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center', width: 80, height: 80, backgroundColor: isNaN(element) ? 'gray' : 'blue'}}><Text key={index}>{element}</Text></Pressable>
+                  <Pressable onPress={() => handleInput(element)} style={[STYLES.button, {backgroundColor: isNaN(element) ? 'gray' : 'blue'}]}>
+                    <Text key={index}>{element}</Text>
+                  </Pressable>
                 </View>
               ))}
 
@@ -156,3 +158,35 @@ export default function App() {
     </View>
   )
 }
+
+const STYLES = StyleSheet.create({
+  mainContainer: {
+    justifyContent: 'center', 
+    alignSelf: "center", 
+    marginVertical: 80
+  },
+  title: {
+    fontSize: 45, 
+    fontWeight: "bold"
+  },
+  calContentContainer : {
+    flexDirection: "row", 
+    marginBottom: 10, 
+    height: 70, 
+    width: 340, 
+    borderRadius: 4, 
+    borderWidth: 1
+  },
+  calContent:{
+    fontSize: 50, 
+    textAlign: "right", 
+    flex: 1
+  },
+  button: {
+    borderRadius: 8, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    textAlignVertical: 'center', 
+    width: 80, height: 80
+  }
+})
