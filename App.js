@@ -35,13 +35,13 @@ export default function App() {
   function handleInput(input){
 
     if (!isNaN(input) || input == ",") {
-      
-      if (input == ",") {
-        
-        input = "."
-      }
 
-      handleNumber(input)
+      input = input.replace(",",".");
+
+      if (!(input == "." && calContent.includes("."))) {
+        
+        handleNumber(input)
+      }
 
     }else{
 
