@@ -1,26 +1,30 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 
-import Article from "./components/Article";
-
 export default function App() {
 
-  function Articles(){
+  let content = {
+    paragraphOne: "Párrafo 1",
+    paragraphTwo: "Párrafo 2",
+    title: "Esto es un título"
+  }
 
-    let articles = []
-
-    for (let i = 0; i < 4; i++) {
-      
-      articles.push(<Article key={i.toString()}></Article>)
-    }
+  function Article(){
 
     return (
-      articles
+      <View style={styles.container}>
+        <Text>{content.title}</Text>
+        <Text>{content.paragraphOne}</Text>
+        <Text>{content.paragraphTwo}</Text>
+      </View>
     );
   }
 
   return (
-    <Articles></Articles>
+    <>
+      <Article></Article>
+      <Article></Article>
+    </>
   );
 }
 
