@@ -13,39 +13,21 @@ export default function App() {
       Alert.alert("Alerta","No se ha introducido nada");
       setTextInputContent("");
 
-    }else{
+    }else if (isNaN(textInputContent)) {
 
-      if (validarDNI(textInputContent)) {
+      Alert.alert("Alerta","Se ha introducido texto");
+      setTextInputContent("");
 
-        setTextResult("DNI correcto: " + textInputContent);
-  
-      }else{
+    }else if (!isNaN(textInputContent)) {
 
-        Alert.alert("Alerta","Introduce un DNI con ocho cifras y una letra");
-        setTextInputContent("");
-      }
+      setTextResult((textInputContent * 1.082) + " dólares");
     }
-  }
-
-  function validarDNI(input){
-
-    let isValid = false;
-
-    if (input.length == 9) {
-      
-      if (!isNaN(input.substring(0,8)) && isNaN(input.substring(8,9))) {
-        
-        isValid = true;
-      }
-    }
-
-    return isValid;
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Validador DNI</Text>
-      <TextInput onChangeText={(text) => setTextInputContent(text)} placeholder="Inserta DNI" value={textInputContent}/>
+      <Text style={styles.text}>Convertidor € - $</Text>
+      <TextInput onChangeText={(text) => setTextInputContent(text)} placeholder="Inserta euros" value={textInputContent}/>
       <Text style={styles.text}>{textResult}</Text>
       <Pressable style={styles.pressable} onPress={handlePressable}>
         <Text>Pulsa...</Text>
