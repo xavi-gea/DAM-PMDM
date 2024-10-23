@@ -10,7 +10,7 @@ export default function App() {
 
   const screenWidth = useWindowDimensions().width;
 
-  const [backColor,setBackColor] = useState('white');
+  const [backColor,setBackColor] = useState('yellow');
   const [squareColor,setSquareColor] = useState('green');
   const [squareWidth,setSquareWidth] = useState(currentSquareSize);
   const [squareHeight,setSquareHeight] = useState(currentSquareSize);
@@ -21,12 +21,12 @@ export default function App() {
 
     if(cycleElements){
 
-      setBackColor('white')
+      setBackColor('yellow')
       setSquareColor('green')
 
     }else{
 
-      setBackColor('black')
+      setBackColor('green')
       setSquareColor('yellow')
     }
 

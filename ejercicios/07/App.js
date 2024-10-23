@@ -2,18 +2,16 @@ import { useState } from "react";
 import { View, Pressable, Text, StyleSheet, useWindowDimensions } from 'react-native';
 
 let cycleElements = true;
-let currentSquareSize = 200;
-const initialSquareSize = currentSquareSize;
-let growSquare = true;
+let squareSize = 200;
 
 export default function App() {
 
   const screenWidth = useWindowDimensions().width;
 
-  const [backColor,setBackColor] = useState('white');
+  const [backColor,setBackColor] = useState('yellow');
   const [squareColor,setSquareColor] = useState('green');
-  const [squareWidth,setSquareWidth] = useState(currentSquareSize);
-  const [squareHeight,setSquareHeight] = useState(currentSquareSize);
+  const [squareWidth,setSquareWidth] = useState(squareSize);
+  const [squareHeight,setSquareHeight] = useState(squareSize);
 
   function handleOnPress(){
 
@@ -21,33 +19,19 @@ export default function App() {
 
     if(cycleElements){
 
-      setBackColor('white')
+      setBackColor('yellow')
       setSquareColor('green')
 
     }else{
 
-      setBackColor('black')
+      setBackColor('green')
       setSquareColor('yellow')
     }
 
-    if (squareWidth >= screenWidth) {
-        
-      growSquare = false;
-
-    }else if (squareWidth <= initialSquareSize) {
+    if (squareWidth <= screenWidth) {
       
-      growSquare = true;
-    }
-
-    if (growSquare) {
-      
-      setSquareWidth(currentSquareSize+=10)
-      setSquareHeight(currentSquareSize+=10)
-
-    }else{
-
-      setSquareWidth(currentSquareSize-=10)
-      setSquareHeight(currentSquareSize-=10)
+      setSquareWidth(squareSize+=10)
+      setSquareHeight(squareSize+=10)
     }
   }
 
