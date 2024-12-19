@@ -1,12 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Text, View } from 'react-native';
 
+import Ejercicio1 from './screens/Ejercicio1';
+import Ejercicio2 from './screens/Ejercicio2';
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
 export default function App() {
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Ejercicio1" component={Ejercicio1}></Tab.Screen>
+        <Tab.Screen name="Ejercicio2" component={Ejercicio2}></Tab.Screen>
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 
