@@ -1,13 +1,13 @@
 import { Text, Image, View, Pressable, StyleSheet } from 'react-native';
 
-export const Card = (props) => {
+export default function Card(props){
 
   return (
     <View style={styles.page}>
       <View style={styles.container}>
         <View style={{ width: '50%', alignItems: 'center' }}>
           <Text style={styles.text} onPress={props.back}>
-            Nombre pokémon
+            {props.name}
           </Text>
           <Image
             style={{

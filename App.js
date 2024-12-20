@@ -1,12 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import Ejercicio1 from './screens/Ejercicio1';
-import Ejercicio2 from './screens/Ejercicio2';
+import Ejercicio1 from './screens/Ejercicio1/Ejercicio1';
+import Ejercicio2 from './screens/Ejercicio2/Ejercicio2';
 
-const Stack = createStackNavigator();
+//const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
