@@ -15,58 +15,94 @@ export default function Ejercicio2() {
   const [prevPokeURL, setPrevPokeURL] = useState("");
   const [currPokeURL, setCurrPokeURL] = useState("https://pokeapi.co/api/v2/pokemon/");
   const [nextPokeURL, setNextPokeURL] = useState("");
+  const [hasPokeData, setHasPokeData] = useState(false);
   const [pokeData, setPokeData] = useState();
-
-  useEffect( () => {
-
-    queryAPI();
-
-  }, []);
 
   useEffect(() => {
 
-    if (pokeData !== undefined) {
+    const getPokeList = async () => {
+    
+      const pokeAPIData = await callAPI(currPokeURL);
+
+      if (pokeAPIData != null) {
+
+        setPokeData(pokeAPIData);
+
+        setHasPokeData(true);
+        
+        setNextPokeURL(pokeAPIData.next);
+        setPrevPokeURL(pokeAPIData.previous);
       
-      setNextPokeURL(pokeData.next);
-      setPrevPokeURL(pokeData.previous);
+      }else{
+
+        setHasPokeData(false);
+      }
+    };
+
+    getPokeList();
+
+  }, [currPokeURL]);
+
+  const callAPI = async (urlToFetch) => {
+
+    try {
+
+      const response = await fetch(urlToFetch);
+
+      if (response.ok) {
+
+        return await response.json();
+
+      }else{
+
+        return null;
+      }
+      
+    } catch (error) {
+      
+      console.error(error);
+      return null;
     }
+  }
+  
+  const getFrontImage = async (pokeURL) => {
+    
+    const frontImage = await callAPI(pokeURL);
 
-  }, [pokeData]);
+    return frontImage != null ? frontImage.sprites.front_default : "";
+  }
 
-  const queryAPI = async() => {
+  const changePage = async (pageType) => {
 
-    let pokeAPIData = await callPokeAPI(currPokeURL);
+    let newCurrentURL = "";
+    
+    newCurrentURL = (pageType == "next") ? nextPokeURL : prevPokeURL;
 
-    setPokeData(pokeAPIData);
-  };
-
-  const getFrontImage = (pokeURL) => callPokeAPI(pokeURL).sprites.front_default;
-
-  const callPokeAPI = async (urlToFetch) => {
-
-    const response = await fetch(urlToFetch)
-      .then(res => res.json())
+    if (newCurrentURL != "" && newCurrentURL != undefined) {
       
-    return response;
+      setCurrPokeURL(newCurrentURL);
+    }
   }
   
   return (
     <ScrollView>
-      <View style={styles.page}>
+      <View style={STYLES.page}>
         <Text style={{ fontSize: 30 }}>Pókemons</Text>
-        <View style={styles.container}>
-          {pokeData.results.map((element, index) => (
+        <View style={STYLES.container}>
+          {hasPokeData ? (pokeData.results.map(async (element, index) => (
               
-            <Pokemon key={index} name={element.name} uri={getFrontImage(element.url)}/>
+            // onpress, call method and pass poke id obtained from element
 
-          ))}
+            <Pokemon key={index} name={element.name} uri={await getFrontImage(element.url)}/>
+
+          ))) : ("")}
         </View>
-        <View style={styles.containerButtons}>
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Anterior</Text>
+        <View style={STYLES.containerButtons}>
+          <Pressable style={STYLES.button} onPress={() => changePage("prev")}>
+            <Text style={STYLES.buttonText}>Anterior</Text>
           </Pressable>
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Siguiente</Text>
+          <Pressable style={STYLES.button} onPress={() => changePage("next")}>
+            <Text style={STYLES.buttonText}>Siguiente</Text>
           </Pressable>
         </View>
       </View>
@@ -74,7 +110,7 @@ export default function Ejercicio2() {
   );
 }
 
-const styles = StyleSheet.create({
+const STYLES = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
