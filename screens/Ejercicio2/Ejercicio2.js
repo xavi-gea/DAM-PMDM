@@ -7,8 +7,9 @@ import {
   Image,
 } from 'react-native';
 
-import Pokemon from './Pokemon';
 import { useEffect, useState } from 'react';
+
+import Pokemon from './Pokemon';
 
 export default function Ejercicio2() {
 
@@ -92,6 +93,7 @@ export default function Ejercicio2() {
           {hasPokeData ? (pokeData.results.map(async (element, index) => (
               
             // onpress, call method and pass poke id obtained from element
+            // place onpress in pressable inside pokemon component?
 
             <Pokemon key={index} name={element.name} uri={await getFrontImage(element.url)}/>
 

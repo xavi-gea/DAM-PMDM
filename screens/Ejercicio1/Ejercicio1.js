@@ -1,30 +1,60 @@
 import { Text, View, Image, Pressable, StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
 
+import Rick from './Rick';
+
 export default function Ejercicio1() {
 
     const [rickData, setRickData] = useState();
-  
-    useEffect(() => {
-
-
-  
-    }, [rickData]);
+    const [characterAmount, setCharacterAmount] = useState(6);
   
     const callRickAPI = async () => {
-
-      // todo: call with multiple characters with id randomized beforehand
   
-      const response = await fetch("https://rickandmortyapi.com/api/character/1")
-        .then(setRickData(await response.json()))
-        .catch(console.log(error));
+      try {
+
+        const response = await fetch(`https://rickandmortyapi.com/api/character/${getRandomCharactersID(characterAmount)}`);
+  
+        if (response.ok) {
+  
+          return await response.json();
+  
+        }else{
+  
+          return null;
+        }
+        
+      } catch (error) {
+        
+        console.error(error);
+        return null;
+      }
     }
 
-    const handleOnPress = () => {
+    const handleOnPress = async () => {
 
       setTimeout(1000);
-      callRickAPI();
-    };
+      const rickAPIData = await callRickAPI();
+
+      if (rickAPIData != null) {
+        
+        setRickData(rickAPIData);
+
+        // todo here?
+      }
+    }
+
+    const getRandomCharactersID = (iterations) => {
+
+      const getRandomIntInclusive = (min, max) => {
+
+        const minCeiled = Math.ceil(min);
+        const maxFloored = Math.floor(max);
+      
+        return Math.floor(Math.random() * ((maxFloored - minCeiled) + 1) + minCeiled);
+      }
+
+      return Array.from({length: iterations}, () => getRandomIntInclusive(1,826)).toString();
+    }
   
   return (
     <View
@@ -36,33 +66,25 @@ export default function Ejercicio1() {
       <Text style={{ fontSize: 45, fontWeight: 'bold' }} onPress={handleOnPress}>Memory</Text>
 
       <View style={{ marginTop: 5 }}>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ padding: 3 }}>
-            <Pressable
-              style={{
-                borderRadius: 8,
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlignVertical: 'center',
-                width: 80,
-                height: 80,
-                backgroundColor: 'blue',
-              }}>
-              <Image
-                style={styles.tinyPhoto}
-                source={{
-                  uri: '',
-                }}
-              />
-            </Pressable>
+
+        {/* map here? */}
+
+          <View style={{ flexDirection: 'row' }}>
+            
+            {/* map here? */}
+
+              <Rick/>
+              <Rick/>
+              <Rick/>
+              <Rick/>
+
           </View>
-        </View>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const STYLES = StyleSheet.create({
   tinyPhoto: {
     width: 80,
     height: 80,
