@@ -1,11 +1,17 @@
 import { Text, Image, View, Pressable, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Pokemon(props){
+
+  const navigation = useNavigation();
 
   return (
     <View style={{ width: "50%", alignItems: "center" }}>
       <Text style={styles.text}>{props.name}</Text>
-      <Pressable>
+      <Pressable onPress={() => navigation.navigate('Card', {
+        name: props.name,
+        img: props.uri
+      })}>
         <Image
           style={{
             width: 120,

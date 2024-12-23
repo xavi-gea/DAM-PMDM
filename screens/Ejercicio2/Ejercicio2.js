@@ -8,10 +8,13 @@ import {
 } from 'react-native';
 
 import { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 import Pokemon from './Pokemon';
 
 export default function Ejercicio2() {
+
+  const navigation = useNavigation();
 
   const [prevPokeURL, setPrevPokeURL] = useState("");
   const [currPokeURL, setCurrPokeURL] = useState("https://pokeapi.co/api/v2/pokemon/");
@@ -90,23 +93,27 @@ export default function Ejercicio2() {
       <View style={STYLES.page}>
         <Text style={{ fontSize: 30 }}>Pókemons</Text>
         <View style={STYLES.container}>
-          {hasPokeData ? (pokeData.results.map(async (element, index) => (
-              
-            // onpress, call method and pass poke id obtained from element
-            // place onpress in pressable inside pokemon component?
+          {hasPokeData
+            ? pokeData.results.map(async (element, index) => (
+                // onpress, call method and pass poke id obtained from element
+                // place onpress in pressable inside pokemon component?
 
-            <Pokemon key={index} name={element.name} uri={await getFrontImage(element.url)}/>
-
-          ))) : ("")}
+                <Pokemon
+                  key={index}
+                  name={element.name}
+                  uri={await getFrontImage(element.url)}
+                />
+              ))
+            : ""}
         </View>
-        <View style={STYLES.containerButtons}>
-          <Pressable style={STYLES.button} onPress={() => changePage("prev")}>
-            <Text style={STYLES.buttonText}>Anterior</Text>
-          </Pressable>
-          <Pressable style={STYLES.button} onPress={() => changePage("next")}>
-            <Text style={STYLES.buttonText}>Siguiente</Text>
-          </Pressable>
-        </View>
+      </View>
+      <View style={STYLES.containerButtons}>
+        <Pressable style={STYLES.button} onPress={() => changePage("prev")}>
+          <Text style={STYLES.buttonText}>Anterior</Text>
+        </Pressable>
+        <Pressable style={STYLES.button} onPress={() => changePage("next")}>
+          <Text style={STYLES.buttonText}>Siguiente</Text>
+        </Pressable>
       </View>
     </ScrollView>
   );
