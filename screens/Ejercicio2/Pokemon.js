@@ -7,7 +7,7 @@ export default function Pokemon(props){
 
   return (
     <View style={{ width: "50%", alignItems: "center" }}>
-      <Text style={styles.text}>{props.name}</Text>
+      <Text style={STYLES.text}>{props.name}</Text>
       <Pressable onPress={() => navigation.navigate('Card', {
         name: props.name,
         imgList: props.uri
@@ -26,7 +26,7 @@ export default function Pokemon(props){
   );
 };
 
-const styles = StyleSheet.create({
+const STYLES = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',

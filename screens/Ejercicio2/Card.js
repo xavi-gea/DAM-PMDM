@@ -4,11 +4,11 @@ import { useState } from 'react';
 
 export default function Card({ route }){
   
-  const navigation = useNavigation();
-
-  const {name, imgList} = route.params;
-
   const [currentImgCount, setCurrentImgCount] = useState(0);
+
+  const navigation = useNavigation();
+  
+  const {name, imgList} = route.params;
 
   const changeImage = (pageType) => {
 
@@ -16,21 +16,21 @@ export default function Card({ route }){
 
     if (pageType == "next") {
 
-      (currentCount + 1) < imgList.length ? currentCount++ : "";
+      (currentCount + 1) < imgList.length ? currentCount++ : currentCount = 0;
 
     }else{
 
-      (currentCount - 1) >= 0 ? currentCount-- : "";
+      (currentCount - 1) >= 0 ? currentCount-- : currentCount = (imgList.length - 1);
     }
 
     setCurrentImgCount(currentCount);
   }
 
   return (
-    <View style={styles.container}>
+    <View style={STYLES.container}>
       <View>
         <View style={{ width: '50%', alignItems: 'center' }}>
-          <Text style={styles.text} onPress={() => navigation.goBack()}>
+          <Text style={STYLES.text} onPress={() => navigation.goBack()}>
             {name}
           </Text>
           <Image
@@ -44,19 +44,19 @@ export default function Card({ route }){
           />
         </View>
       </View>
-      <View style={styles.buttons}>
-        <Pressable onPress={() => changeImage("prev")} style={styles.button}>
-          <Text style={styles.buttonText}>Anterior</Text>
+      <View style={STYLES.buttons}>
+        <Pressable onPress={() => changeImage("prev")} style={STYLES.button}>
+          <Text style={STYLES.buttonText}>Anterior</Text>
         </Pressable>
-        <Pressable onPress={() => changeImage("next")} style={styles.button}>
-          <Text style={styles.buttonText}>Siguiente</Text>
+        <Pressable onPress={() => changeImage("next")} style={STYLES.button}>
+          <Text style={STYLES.buttonText}>Siguiente</Text>
         </Pressable>
       </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const STYLES = StyleSheet.create({
   container: {
     flexDirection: 'column',
     alignItems: 'center',

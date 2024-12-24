@@ -1,20 +1,9 @@
-import {
-  View,
-  Pressable,
-  ScrollView,
-  Text,
-  StyleSheet,
-  Image,
-} from 'react-native';
-
+import { View, Pressable, ScrollView, Text, StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 
 import Pokemon from './Pokemon';
 
 export default function Ejercicio2() {
-
-  const navigation = useNavigation();
 
   const [prevPokeURL, setPrevPokeURL] = useState("");
   const [currPokeURL, setCurrPokeURL] = useState("https://pokeapi.co/api/v2/pokemon/");
@@ -33,9 +22,12 @@ export default function Ejercicio2() {
         setPokeData(pokeAPIData);
 
         setHasPokeData(true);
-        
-        setNextPokeURL(pokeAPIData.next);
-        setPrevPokeURL(pokeAPIData.previous);
+
+        const nextURL = pokeAPIData.next;
+        nextURL != null ? setNextPokeURL(nextURL) : setNextPokeURL("https://pokeapi.co/api/v2/pokemon/");
+
+        const prevURL = pokeAPIData.previous;
+        prevURL != null ? setPrevPokeURL(prevURL) : setPrevPokeURL("https://pokeapi.co/api/v2/pokemon?offset=1282");
       
       }else{
 
@@ -71,17 +63,17 @@ export default function Ejercicio2() {
   
   const getImagesURI = async (pokeURL) => {
 
-    const pokeData = await callAPI(pokeURL);
+    const pokemon = await callAPI(pokeURL);
 
     const pokeImages = [];
 
-    if (pokeData != null) {
+    if (pokemon != null) {
 
       pokeImages.push(
-        pokeData.sprites.front_default,
-        pokeData.sprites.back_default,
-        pokeData.sprites.front_shiny,
-        pokeData.sprites.back_shiny
+        pokemon.sprites.front_default,
+        pokemon.sprites.back_default,
+        pokemon.sprites.back_shiny,
+        pokemon.sprites.front_shiny
       );
     }
 
@@ -93,11 +85,8 @@ export default function Ejercicio2() {
     let newCurrentURL = "";
     
     newCurrentURL = (pageType == "next") ? nextPokeURL : prevPokeURL;
-
-    if (newCurrentURL != "" && newCurrentURL != undefined) {
       
-      setCurrPokeURL(newCurrentURL);
-    }
+    setCurrPokeURL(newCurrentURL);
   }
   
   return (
