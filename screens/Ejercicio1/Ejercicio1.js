@@ -6,13 +6,14 @@ import Rick from './Rick';
 export default function Ejercicio1() {
 
     const [rickData, setRickData] = useState();
-    const [characterAmount, setCharacterAmount] = useState(6);
+    const [gameTable, setGameTable] = useState([3,4]);
+    const [hasRicks, setHasRicks] = useState(false);
   
     const callRickAPI = async () => {
   
       try {
 
-        const response = await fetch(`https://rickandmortyapi.com/api/character/${getRandomCharactersID(characterAmount)}`);
+        const response = await fetch(`https://rickandmortyapi.com/api/character/${getRandomCharactersID((gameTable[0] * gameTable[1]) / 2)}`);
   
         if (response.ok) {
   
@@ -30,17 +31,57 @@ export default function Ejercicio1() {
       }
     }
 
-    const handleOnPress = async () => {
+    const getRicks = async () => {
 
       setTimeout(1000);
-      const rickAPIData = await callRickAPI();
+      const rickAPIData = await callRickAPI();      
 
       if (rickAPIData != null) {
-        
-        setRickData(rickAPIData);
 
-        // todo here?
+        console.log(getBoardContent(rickAPIData));
+        
+        setRickData(getBoardContent(rickAPIData));
+        setHasRicks(true);
+      
+      }else{
+
+        setHasRicks(false);
       }
+    }
+
+    const getBoardContent = (ricks) => {
+
+      const doubleRicks = ricks.concat(ricks);
+
+      doubleRicks.sort(() => Math.random() - 0.5);
+
+      let boardContent = [];
+
+      let currentRick = 0;
+
+      for (let i = 0; i < gameTable[0]; i++) {
+
+        let rowContent = [];
+        
+        for (let j = 0; j < gameTable[1]; j++) {
+          
+          rowContent.push({
+            "id": doubleRicks[currentRick].id,
+            "url": doubleRicks[currentRick].image
+          });
+
+          currentRick++;
+        }
+
+        boardContent.push(rowContent);
+      }
+
+      return boardContent;
+    }
+
+    const handleOnPress = async () => {
+
+      await getRicks();
     }
 
     const getRandomCharactersID = (iterations) => {
@@ -56,32 +97,40 @@ export default function Ejercicio1() {
       return Array.from({length: iterations}, () => getRandomIntInclusive(1,826)).toString();
     }
   
-  return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignSelf: 'center',
-        marginVertical: 80,
-      }}>
-      <Text style={{ fontSize: 45, fontWeight: 'bold' }} onPress={handleOnPress}>Memory</Text>
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignSelf: 'center',
+          marginVertical: 80,
+        }}>
 
-      <View style={{ marginTop: 5 }}>
+        <Text style={{ fontSize: 45, fontWeight: 'bold' }} onPress={handleOnPress}>Memory</Text>
+  
+        <View style={{ marginTop: 5 }}>
 
-        {/* map here? */}
+          {hasRicks 
+            ? rickData.map((row, index) => (
 
-          <View style={{ flexDirection: 'row' }}>
-            
-            {/* map here? */}
+              <View key={index} style={{ flexDirection: 'row' }}>
 
-              <Rick/>
-              <Rick/>
-              <Rick/>
-              <Rick/>
+                {row.map((rick, index) => (
 
-          </View>
+                  <Rick 
+                    key = {index}
+                    id = {rick.id}
+                    uri = {rick.url}
+                  />
+                ))}
+  
+              </View>
+            )) 
+          
+          : ""}
+
+        </View>
       </View>
-    </View>
-  );
+    );
 }
 
 const STYLES = StyleSheet.create({
