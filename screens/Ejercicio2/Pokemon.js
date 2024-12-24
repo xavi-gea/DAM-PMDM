@@ -10,7 +10,7 @@ export default function Pokemon(props){
       <Text style={styles.text}>{props.name}</Text>
       <Pressable onPress={() => navigation.navigate('Card', {
         name: props.name,
-        img: props.uri
+        imgList: props.uri
       })}>
         <Image
           style={{
@@ -18,7 +18,7 @@ export default function Pokemon(props){
             height: 120,
           }}
           source={{
-            uri: props.uri,
+            uri: props.uri[0],
           }}
         />
       </Pressable>

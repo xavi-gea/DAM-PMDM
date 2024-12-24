@@ -69,11 +69,23 @@ export default function Ejercicio2() {
     }
   }
   
-  const getFrontImage = async (pokeURL) => {
-    
-    const frontImage = await callAPI(pokeURL);
+  const getImagesURI = async (pokeURL) => {
 
-    return frontImage != null ? frontImage.sprites.front_default : "";
+    const pokeData = await callAPI(pokeURL);
+
+    const pokeImages = [];
+
+    if (pokeData != null) {
+
+      pokeImages.push(
+        pokeData.sprites.front_default,
+        pokeData.sprites.back_default,
+        pokeData.sprites.front_shiny,
+        pokeData.sprites.back_shiny
+      );
+    }
+
+    return pokeImages;
   }
 
   const changePage = async (pageType) => {
@@ -94,14 +106,12 @@ export default function Ejercicio2() {
         <Text style={{ fontSize: 30 }}>Pókemons</Text>
         <View style={STYLES.container}>
           {hasPokeData
-            ? pokeData.results.map(async (element, index) => (
-                // onpress, call method and pass poke id obtained from element
-                // place onpress in pressable inside pokemon component?
+            ? pokeData.results.map(async (pokemon, index) => (
 
                 <Pokemon
                   key={index}
-                  name={element.name}
-                  uri={await getFrontImage(element.url)}
+                  name={pokemon.name}
+                  uri={await getImagesURI(pokemon.url)}
                 />
               ))
             : ""}

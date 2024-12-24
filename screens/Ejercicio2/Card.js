@@ -1,11 +1,30 @@
 import { Text, Image, View, Pressable, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 
 export default function Card({ route }){
   
   const navigation = useNavigation();
 
-  const {name, img} = route.params;
+  const {name, imgList} = route.params;
+
+  const [currentImgCount, setCurrentImgCount] = useState(0);
+
+  const changeImage = (pageType) => {
+
+    let currentCount = currentImgCount;
+
+    if (pageType == "next") {
+
+      (currentCount + 1) < imgList.length ? currentCount++ : "";
+
+    }else{
+
+      (currentCount - 1) >= 0 ? currentCount-- : "";
+    }
+
+    setCurrentImgCount(currentCount);
+  }
 
   return (
     <View style={styles.container}>
@@ -20,16 +39,16 @@ export default function Card({ route }){
               height: 120,
             }}
             source={{
-              uri: img,
+              uri: imgList[currentImgCount],
             }}
           />
         </View>
       </View>
       <View style={styles.buttons}>
-        <Pressable onPress={route.previous} style={styles.button}>
+        <Pressable onPress={() => changeImage("prev")} style={styles.button}>
           <Text style={styles.buttonText}>Anterior</Text>
         </Pressable>
-        <Pressable onPress={route.next} style={styles.button}>
+        <Pressable onPress={() => changeImage("next")} style={styles.button}>
           <Text style={styles.buttonText}>Siguiente</Text>
         </Pressable>
       </View>
