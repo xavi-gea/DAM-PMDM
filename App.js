@@ -6,6 +6,7 @@ import Ejercicio1 from './screens/Ejercicio1/Ejercicio1';
 
 import Ejercicio2 from './screens/Ejercicio2/Ejercicio2';
 import Card from './screens/Ejercicio2/Card';
+import { Provider } from './screens/Ejercicio1/Context';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -35,17 +36,19 @@ const Ejercicio2Stack = () => {
 export default function App() {
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen 
-          name="Ejercicio1" 
-          component={Ejercicio1} 
-        />
-        <Tab.Screen
-          name="Ejercicio2"
-          component={Ejercicio2Stack}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Provider>
+      <NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen 
+            name="Ejercicio1" 
+            component={Ejercicio1} 
+          />
+          <Tab.Screen
+            name="Ejercicio2"
+            component={Ejercicio2Stack}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
