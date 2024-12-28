@@ -3,10 +3,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Ejercicio1 from './screens/Ejercicio1/Ejercicio1';
+import { Provider } from './screens/Ejercicio1/Context';
 
 import Ejercicio2 from './screens/Ejercicio2/Ejercicio2';
 import Card from './screens/Ejercicio2/Card';
-import { Provider } from './screens/Ejercicio1/Context';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

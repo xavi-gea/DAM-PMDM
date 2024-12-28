@@ -6,16 +6,29 @@ import Context from './Context';
 export default function Rick(props) {
 
   const {chosenRicks, setChosenRicks} = useContext(Context);
+  const {ricksSelected, setRicksSelected} = useContext(Context);
+  const {ricksToShow, setRicksToShow} = useContext(Context);
+  const [ricksUniqueKeys, setRicksUniqueKeys] = useState([]);
 
   const handleOnPress = (rickID) => {
 
-    let currentRicks = chosenRicks;
+    const rickUniqueKey = props.propKey;
 
-    currentRicks.push(rickID);
+    if (!ricksUniqueKeys.includes(rickUniqueKey)) {
+      
+      const currentRicks = [...chosenRicks];
+      const currentRickKeys = [...ricksUniqueKeys]
 
-    console.log(`chosenRicks Rick.js: ${currentRicks}`);
-    
-    setChosenRicks(currentRicks);
+      let currentRicksSelected = ricksSelected;
+  
+      currentRicks.push(rickID);
+      currentRickKeys.push(rickUniqueKey);
+      currentRicksSelected++;
+      
+      setChosenRicks(currentRicks);
+      setRicksUniqueKeys(currentRickKeys);
+      setRicksSelected(currentRicksSelected);
+    }
   }
 
   return (
@@ -33,7 +46,7 @@ export default function Rick(props) {
         onPress={() => handleOnPress(props.id)}
       >
         <Image
-          style={STYLES.tinyPhoto}
+          style={ricksToShow.includes(props.id) || ricksToShow.includes("all") ? STYLES.tinyPhoto : STYLES.tinyPhotoHidden}
           source={{
             uri: props.uri,
           }}
@@ -48,4 +61,9 @@ const STYLES = StyleSheet.create({
     width: 80,
     height: 80,
   },
+  tinyPhotoHidden: {
+    width: 80,
+    height: 80,
+    display:"none"
+  }
 });
