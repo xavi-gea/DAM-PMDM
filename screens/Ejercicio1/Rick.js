@@ -8,11 +8,11 @@ export default function Rick(props) {
   const {chosenRicks, setChosenRicks} = useContext(Context);
   const {ricksSelected, setRicksSelected} = useContext(Context);
   const {ricksToShow, setRicksToShow} = useContext(Context);
-  const [ricksUniqueKeys, setRicksUniqueKeys] = useState([]);
-
+  const {ricksUniqueKeys, setRicksUniqueKeys} = useContext(Context);
+  
   const handleOnPress = (rickID) => {
 
-    const rickUniqueKey = props.propKey;
+    let rickUniqueKey = props.propKey;
 
     if (!ricksUniqueKeys.includes(rickUniqueKey)) {
       
@@ -28,6 +28,7 @@ export default function Rick(props) {
       setChosenRicks(currentRicks);
       setRicksUniqueKeys(currentRickKeys);
       setRicksSelected(currentRicksSelected);
+
     }
   }
 

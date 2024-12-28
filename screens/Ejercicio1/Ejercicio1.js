@@ -11,10 +11,12 @@ export default function Ejercicio1() {
   const {ricksToShow, setRicksToShow} = useContext(Context);
 
   const {ricksUniqueKeys, setRicksUniqueKeys} = useContext(Context);
-  // if tries failed o table completed, reset this ^
+  // if tries failed or table completed, reset this ^
 
   const [rickData, setRickData] = useState();
   const [gameTable, setGameTable] = useState([3,4]);
+  const [currentLevel, setCurrentLevel] = useState(1);
+  const [remainingTries, setRemainingTries] = useState(3);
   const [ricksToMatch, setRicksToMatch] = useState(2);
   const [totalChosenRicks, setTotalChosenRicks] = useState([]);
   const [hasRicks, setHasRicks] = useState(false);
@@ -46,7 +48,7 @@ export default function Ejercicio1() {
           if (currentTotalChosenRicks.length == (gameTable[0] * gameTable[1])) {
             
             console.log("entire table completed!");
-            //todo: all set selected
+            toNextLevel();            
           }
         }
   
@@ -60,7 +62,41 @@ export default function Ejercicio1() {
       }
     }
         
-  }, [chosenRicks]);
+  }, [chosenRicks,totalChosenRicks]);
+
+  const toNextLevel = async () => {
+
+    if (currentLevel != 3) {
+
+      // context
+      setChosenRicks([]);
+      setRicksSelected(0);
+      setRicksToShow(["all"]);
+      setRicksUniqueKeys([]);
+
+      // states
+      setTotalChosenRicks([]);
+      setHasRicks(false);
+
+      if (currentLevel == 1) {
+        
+        setCurrentLevel(2);
+        setGameTable([4,4]);
+
+      }else if(currentLevel == 2){
+
+        setCurrentLevel(3);
+        setGameTable([3,4]);
+        setRicksToMatch(3);
+      }
+
+      await getRicks();
+
+    }else{
+
+      // last level
+    }
+  }
 
   const callRickAPI = async () => {
 
@@ -166,15 +202,15 @@ export default function Ejercicio1() {
       <View style={{ marginTop: 5 }}>
 
         {hasRicks 
-          ? rickData.map((row, index) => (
+          ? rickData.map((row, rowIndex) => (
 
-            <View key={index} style={{ flexDirection: 'row' }}>
+            <View key={rowIndex} style={{ flexDirection: 'row' }}>
 
-              {row.map((rick, index) => (
+              {row.map((rick, rickIndex) => (
 
                 <Rick 
-                  key = {index}
-                  propKey = {index}
+                  key = {`${rowIndex}-${rickIndex}`}
+                  propKey = {`${rowIndex}-${rickIndex}`}
                   id = {rick.id}
                   uri = {rick.url}
                 />
