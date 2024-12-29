@@ -26,8 +26,6 @@ export default function Ejercicio1() {
     if (chosenRicks.length > 0) {
       
       if (chosenRicks.every((rick,i,chosenRicks) => rick == chosenRicks[0])) {
-      
-        console.log("YES");
 
         if (ricksSelected == ricksToMatch) {
 
@@ -38,63 +36,94 @@ export default function Ejercicio1() {
             currentTotalChosenRicks.push(rick);
           });
 
-          setTotalChosenRicks(currentTotalChosenRicks); 
-
-          console.log("set completed");
+          setTotalChosenRicks(currentTotalChosenRicks);
           setRicksToShow(currentTotalChosenRicks);
           setChosenRicks([]);
           setRicksSelected(0);
 
           if (currentTotalChosenRicks.length == (gameTable[0] * gameTable[1])) {
-            
-            console.log("entire table completed!");
+
             toNextLevel();            
           }
         }
   
       }else{
-  
-        console.log("set failed");
-        setRicksToShow(["all"]);
-        //todo: handle set fail and board fail
-        
-        // reset relevant states
+
+        resetLevelStates();
+
+        let currentTries = remainingTries;
+
+        if (currentTries != 1) {
+
+          currentTries--;
+
+          setRemainingTries(currentTries);
+          
+          alert(`Vaya! Te quedan ${currentTries} intentos`);
+
+        }else{
+
+          returnToFirstLevel();
+
+          alert(`Vaya! Ya no te quedan intentos :(`);
+        }
       }
     }
         
   }, [chosenRicks,totalChosenRicks]);
 
-  const toNextLevel = async () => {
+  const resetLevelStates = () => {
 
-    if (currentLevel != 3) {
+    // context
+    setChosenRicks([]);
+    setRicksSelected(0);
+    setRicksToShow(["all"]);
+    setRicksUniqueKeys([]);
 
-      // context
-      setChosenRicks([]);
-      setRicksSelected(0);
-      setRicksToShow(["all"]);
-      setRicksUniqueKeys([]);
+    // states
+    setTotalChosenRicks([]);
+    setHasRicks(false);
+  }
 
-      // states
-      setTotalChosenRicks([]);
-      setHasRicks(false);
+  const returnToFirstLevel = () => {
 
-      if (currentLevel == 1) {
+    setRemainingTries(3);
+
+    setCurrentLevel(1);
+    setGameTable([3,4]);
+    setRicksToMatch(2);
+  }
+
+  const toNextLevel = () => {
+
+    resetLevelStates();
+    setRemainingTries(3);
+
+    let newLevel = currentLevel;
+
+    if (newLevel != 3) {
+
+      if (newLevel == 1) {
         
-        setCurrentLevel(2);
+        newLevel = 2;
         setGameTable([4,4]);
 
-      }else if(currentLevel == 2){
+      }else if(newLevel == 2){
 
-        setCurrentLevel(3);
+        newLevel = 3;
         setGameTable([3,4]);
         setRicksToMatch(3);
       }
 
-      await getRicks();
+      setCurrentLevel(newLevel);
+
+      alert(`Felicidades! A por el nivel ${newLevel}`);
 
     }else{
 
-      // last level
+      returnToFirstLevel();
+      
+      alert(`Felicidades, has ganado el juego!`);
     }
   }
 
@@ -121,7 +150,7 @@ export default function Ejercicio1() {
   }
 
   const getRicks = async () => {
-
+    
     //await new Promise(resolve => setTimeout(resolve, 5000));
 
     const rickAPIData = await callRickAPI();      
