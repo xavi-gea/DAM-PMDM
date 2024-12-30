@@ -1,13 +1,12 @@
-import { useContext, useState } from 'react';
-import { Text, View, Image, Pressable, StyleSheet } from 'react-native';
+import { useContext } from 'react';
+import { View, Image, Pressable, StyleSheet } from 'react-native';
 
 import Context from './Context';
 
 export default function Rick(props) {
 
-  const {chosenRicks, setChosenRicks} = useContext(Context);
-  const {ricksSelected, setRicksSelected} = useContext(Context);
-  const {ricksToShow, setRicksToShow} = useContext(Context);
+  const {chosenRicksIDs, setChosenRicksIDs} = useContext(Context);
+  const {ricksToShow} = useContext(Context);
   const {ricksUniqueKeys, setRicksUniqueKeys} = useContext(Context);
   
   const handleOnPress = (rickID) => {
@@ -16,18 +15,14 @@ export default function Rick(props) {
 
     if (!ricksUniqueKeys.includes(rickUniqueKey)) {
       
-      const currentRicks = [...chosenRicks];
-      const currentRickKeys = [...ricksUniqueKeys]
-
-      let currentRicksSelected = ricksSelected;
+      const currentRicks = [...chosenRicksIDs];
+      const currentRickKeys = [...ricksUniqueKeys];
   
       currentRicks.push(rickID);
       currentRickKeys.push(rickUniqueKey);
-      currentRicksSelected++;
       
-      setChosenRicks(currentRicks);
+      setChosenRicksIDs(currentRicks);
       setRicksUniqueKeys(currentRickKeys);
-      setRicksSelected(currentRicksSelected);
 
     }
   }

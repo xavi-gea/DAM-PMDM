@@ -1,47 +1,45 @@
-import { Text, View, Image, Pressable, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
 
+import CallAPI from '../../libraries/CallAPI';
 import Rick from './Rick';
 import Context from './Context';
 
 export default function Ejercicio1() {
 
-  const {chosenRicks, setChosenRicks} = useContext(Context);
-  const {ricksSelected, setRicksSelected} = useContext(Context);
-  const {ricksToShow, setRicksToShow} = useContext(Context);
+  const {chosenRicksIDs, setChosenRicksIDs} = useContext(Context);
+  const {setRicksToShow} = useContext(Context);
 
-  const {ricksUniqueKeys, setRicksUniqueKeys} = useContext(Context);
-  // if tries failed or table completed, reset this ^
+  const {setRicksUniqueKeys} = useContext(Context);
 
   const [rickData, setRickData] = useState();
   const [gameTable, setGameTable] = useState([3,4]);
-  const [currentLevel, setCurrentLevel] = useState(1);
+  const [gameLevel, setGameLevel] = useState(1);
   const [remainingTries, setRemainingTries] = useState(3);
-  const [ricksToMatch, setRicksToMatch] = useState(2);
-  const [totalChosenRicks, setTotalChosenRicks] = useState([]);
+  const [ricksAmountToMatch, setRicksAmountToMatch] = useState(2);
+  const [totalChosenRicksIDs, setTotalChosenRicksIDs] = useState([]);
   const [hasRicks, setHasRicks] = useState(false);
 
   useEffect(() => {
 
-    if (chosenRicks.length > 0) {
-      
-      if (chosenRicks.every((rick,i,chosenRicks) => rick == chosenRicks[0])) {
+    if (chosenRicksIDs.length > 0) {
 
-        if (ricksSelected == ricksToMatch) {
+      if (chosenRicksIDs.every((rickID,i,chosenRicksIDs) => rickID == chosenRicksIDs[0])) {
 
-          let currentTotalChosenRicks = [...totalChosenRicks];
+        if (chosenRicksIDs.length == ricksAmountToMatch) {
 
-          chosenRicks.forEach(rick => {
+          let totalRicksIDs = [...totalChosenRicksIDs];
+
+          chosenRicksIDs.forEach(rickID => {
             
-            currentTotalChosenRicks.push(rick);
+            totalRicksIDs.push(rickID);
           });
 
-          setTotalChosenRicks(currentTotalChosenRicks);
-          setRicksToShow(currentTotalChosenRicks);
-          setChosenRicks([]);
-          setRicksSelected(0);
+          setTotalChosenRicksIDs(totalRicksIDs);
+          setRicksToShow(totalRicksIDs);
+          setChosenRicksIDs([]);
 
-          if (currentTotalChosenRicks.length == (gameTable[0] * gameTable[1])) {
+          if (totalRicksIDs.length == (gameTable[0] * gameTable[1])) {
 
             toNextLevel();            
           }
@@ -70,18 +68,17 @@ export default function Ejercicio1() {
       }
     }
         
-  }, [chosenRicks,totalChosenRicks]);
+  }, [chosenRicksIDs,totalChosenRicksIDs]);
 
   const resetLevelStates = () => {
 
     // context
-    setChosenRicks([]);
-    setRicksSelected(0);
+    setChosenRicksIDs([]);
     setRicksToShow(["all"]);
     setRicksUniqueKeys([]);
 
     // states
-    setTotalChosenRicks([]);
+    setTotalChosenRicksIDs([]);
     setHasRicks(false);
   }
 
@@ -89,9 +86,9 @@ export default function Ejercicio1() {
 
     setRemainingTries(3);
 
-    setCurrentLevel(1);
+    setGameLevel(1);
     setGameTable([3,4]);
-    setRicksToMatch(2);
+    setRicksAmountToMatch(2);
   }
 
   const toNextLevel = () => {
@@ -99,25 +96,25 @@ export default function Ejercicio1() {
     resetLevelStates();
     setRemainingTries(3);
 
-    let newLevel = currentLevel;
+    let newGameLevel = gameLevel;
 
-    if (newLevel != 3) {
+    if (newGameLevel != 3) {
 
-      if (newLevel == 1) {
+      if (newGameLevel == 1) {
         
-        newLevel = 2;
+        newGameLevel = 2;
         setGameTable([4,4]);
 
-      }else if(newLevel == 2){
+      }else if(newGameLevel == 2){
 
-        newLevel = 3;
+        newGameLevel = 3;
         setGameTable([3,4]);
-        setRicksToMatch(3);
+        setRicksAmountToMatch(3);
       }
 
-      setCurrentLevel(newLevel);
+      setGameLevel(newGameLevel);
 
-      alert(`Felicidades! A por el nivel ${newLevel}`);
+      alert(`Felicidades! A por el nivel ${newGameLevel}`);
 
     }else{
 
@@ -127,33 +124,9 @@ export default function Ejercicio1() {
     }
   }
 
-  const callRickAPI = async () => {
+  const setUpTable = async () => {
 
-    try {
-
-      const response = await fetch(`https://rickandmortyapi.com/api/character/${getRandomCharactersID((gameTable[0] * gameTable[1]) / 2)}`);
-
-      if (response.ok) {
-
-        return await response.json();
-
-      }else{
-
-        return null;
-      }
-      
-    } catch (error) {
-      
-      console.error(error);
-      return null;
-    }
-  }
-
-  const getRicks = async () => {
-    
-    //await new Promise(resolve => setTimeout(resolve, 5000));
-
-    const rickAPIData = await callRickAPI();      
+    const rickAPIData = await CallAPI(`https://rickandmortyapi.com/api/character/${getRandomCharactersID((gameTable[0] * gameTable[1]) / 2)}`);      
 
     if (rickAPIData != null) {
       
@@ -202,7 +175,7 @@ export default function Ejercicio1() {
 
   const handleOnPress = async () => {
 
-    await getRicks();
+    await setUpTable();
   }
 
   const getRandomCharactersID = (iterations) => {
@@ -254,10 +227,3 @@ export default function Ejercicio1() {
     </View>
   );
 }
-
-const STYLES = StyleSheet.create({
-  tinyPhoto: {
-    width: 80,
-    height: 80,
-  },
-});

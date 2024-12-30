@@ -54,7 +54,7 @@ export default function Card({ route }){
       </View>
     </View>
   );
-};
+}
 
 const STYLES = StyleSheet.create({
   container: {

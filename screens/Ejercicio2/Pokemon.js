@@ -27,40 +27,8 @@ export default function Pokemon(props){
 };
 
 const STYLES = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  page: {
-    marginTop: 35,
-    position: 'relative',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   text: {
     fontSize: 20,
     textAlign: 'center',
-  },
-  button: {
-    backgroundColor: 'black',
-    width: '30%',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 40,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: '700',
-    fontSize: 14,
-  },
-  containerButtons: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  }
 });

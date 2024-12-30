@@ -4,14 +4,13 @@ const Context = createContext();
 
 export const Provider = ({children}) => {
 
-    const [chosenRicks, setChosenRicks] = useState([]);
-    const [ricksSelected, setRicksSelected] = useState(0);
+    const [chosenRicksIDs, setChosenRicksIDs] = useState([]);
     const [ricksToShow, setRicksToShow] = useState(["all"]);
     const [ricksUniqueKeys, setRicksUniqueKeys] = useState([]);
 
     return (
 
-        <Context.Provider value={{chosenRicks, setChosenRicks, ricksSelected, setRicksSelected, ricksToShow, setRicksToShow, ricksUniqueKeys, setRicksUniqueKeys}}>
+        <Context.Provider value={{chosenRicksIDs, setChosenRicksIDs, ricksToShow, setRicksToShow, ricksUniqueKeys, setRicksUniqueKeys}}>
             {children}
         </Context.Provider>
     );

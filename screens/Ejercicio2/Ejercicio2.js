@@ -1,6 +1,7 @@
 import { View, Pressable, ScrollView, Text, StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
 
+import CallAPI from '../../libraries/CallAPI';
 import Pokemon from './Pokemon';
 
 export default function Ejercicio2() {
@@ -15,7 +16,7 @@ export default function Ejercicio2() {
 
     const getPokeList = async () => {
     
-      const pokeAPIData = await callAPI(currPokeURL);
+      const pokeAPIData = await CallAPI(currPokeURL);
 
       if (pokeAPIData != null) {
 
@@ -38,32 +39,10 @@ export default function Ejercicio2() {
     getPokeList();
 
   }, [currPokeURL]);
-
-  const callAPI = async (urlToFetch) => {
-
-    try {
-
-      const response = await fetch(urlToFetch);
-
-      if (response.ok) {
-
-        return await response.json();
-
-      }else{
-
-        return null;
-      }
-      
-    } catch (error) {
-      
-      console.error(error);
-      return null;
-    }
-  }
   
   const getImagesURI = async (pokeURL) => {
 
-    const pokemon = await callAPI(pokeURL);
+    const pokemon = await CallAPI(pokeURL);
 
     const pokeImages = [];
 
@@ -131,10 +110,6 @@ const STYLES = StyleSheet.create({
     position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  text: {
-    fontSize: 20,
-    textAlign: 'center',
   },
   button: {
     backgroundColor: 'black',
