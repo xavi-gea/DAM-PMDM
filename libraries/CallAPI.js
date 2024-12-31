@@ -1,21 +1,21 @@
-export default async function CallAPI(urlToFetch){
+export default async function CallAPI(urlToFetch) {
 
-    try {
+  try {
+    
+    const response = await fetch(urlToFetch);
 
-        const response = await fetch(urlToFetch);
-  
-        if (response.ok) {
-  
-          return await response.json();
-  
-        }else{
-  
-          return null;
-        }
-        
-      } catch (error) {
-        
-        console.error(error);
-        return null;
-      }
+    if (response.ok) {
+
+      return await response.json();
+      
+    } else {
+
+      return null;
+    }
+
+  } catch (error) {
+
+    console.error(error);
+    return null;
+  }
 }

@@ -13,7 +13,7 @@ export default function Rick(props) {
 
     let rickUniqueKey = props.propKey;
 
-    if (!ricksUniqueKeys.includes(rickUniqueKey)) {
+    if (!ricksUniqueKeys.includes(rickUniqueKey) && !ricksToShow.includes("all")) {
       
       const currentRicks = [...chosenRicksIDs];
       const currentRickKeys = [...ricksUniqueKeys];
@@ -23,7 +23,6 @@ export default function Rick(props) {
       
       setChosenRicksIDs(currentRicks);
       setRicksUniqueKeys(currentRickKeys);
-
     }
   }
 
@@ -60,6 +59,6 @@ const STYLES = StyleSheet.create({
   tinyPhotoHidden: {
     width: 80,
     height: 80,
-    display:"none"
+    display: "none"
   }
 });

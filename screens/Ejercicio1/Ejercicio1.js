@@ -13,7 +13,7 @@ export default function Ejercicio1() {
   const {setRicksUniqueKeys} = useContext(Context);
 
   const [rickData, setRickData] = useState();
-  const [gameTable, setGameTable] = useState([3,4]);
+  const [gameTable, setGameTable] = useState({rows: 3, cols: 4});
   const [gameLevel, setGameLevel] = useState(1);
   const [remainingTries, setRemainingTries] = useState(3);
   const [ricksAmountToMatch, setRicksAmountToMatch] = useState(2);
@@ -22,62 +22,65 @@ export default function Ejercicio1() {
 
   useEffect(() => {
 
-    if (chosenRicksIDs.length > 0) {
+    const checkChosenRicks = () => {
 
-      if (chosenRicksIDs.every((rickID,i,chosenRicksIDs) => rickID == chosenRicksIDs[0])) {
+      if (chosenRicksIDs.length > 0) {
 
-        if (chosenRicksIDs.length == ricksAmountToMatch) {
-
-          let totalRicksIDs = [...totalChosenRicksIDs];
-
-          chosenRicksIDs.forEach(rickID => {
-            
-            totalRicksIDs.push(rickID);
-          });
-
-          setTotalChosenRicksIDs(totalRicksIDs);
-          setRicksToShow(totalRicksIDs);
-          setChosenRicksIDs([]);
-
-          if (totalRicksIDs.length == (gameTable[0] * gameTable[1])) {
-
-            toNextLevel();            
+        if (chosenRicksIDs.every((rickID,i,chosenRicksIDs) => rickID == chosenRicksIDs[0])) {
+    
+          if (chosenRicksIDs.length == ricksAmountToMatch) {
+    
+            let totalRicksIDs = [...totalChosenRicksIDs];
+    
+            chosenRicksIDs.forEach(rickID => {
+              
+              totalRicksIDs.push(rickID);
+            });
+    
+            setTotalChosenRicksIDs(totalRicksIDs);
+            setRicksToShow(totalRicksIDs);
+            setChosenRicksIDs([]);
+    
+            if (totalRicksIDs.length == (gameTable.rows * gameTable.cols)) {
+    
+              toNextLevel();            
+            }
           }
-        }
-  
-      }else{
-
-        resetLevelStates();
-
-        let currentTries = remainingTries;
-
-        if (currentTries != 1) {
-
-          currentTries--;
-
-          setRemainingTries(currentTries);
-          
-          alert(`Vaya! Te quedan ${currentTries} intentos`);
-
+    
         }else{
-
-          returnToFirstLevel();
-
-          alert(`Vaya! Ya no te quedan intentos :(`);
+    
+          resetLevelStates();
+    
+          let currentTries = remainingTries;
+    
+          if (currentTries != 1) {
+    
+            currentTries--;
+    
+            setRemainingTries(currentTries);
+            
+            alert(`Vaya! Te quedan ${currentTries} intentos`);
+    
+          }else{
+    
+            returnToFirstLevel();
+    
+            alert(`Vaya! Ya no te quedan intentos :(`);
+          }
         }
       }
     }
+
+    checkChosenRicks();
         
-  }, [chosenRicksIDs,totalChosenRicksIDs]);
+  }, [chosenRicksIDs]);
 
   const resetLevelStates = () => {
 
-    // context
     setChosenRicksIDs([]);
     setRicksToShow(["all"]);
     setRicksUniqueKeys([]);
 
-    // states
     setTotalChosenRicksIDs([]);
     setHasRicks(false);
   }
@@ -87,7 +90,7 @@ export default function Ejercicio1() {
     setRemainingTries(3);
 
     setGameLevel(1);
-    setGameTable([3,4]);
+    setGameTable({rows: 3, cols: 4});
     setRicksAmountToMatch(2);
   }
 
@@ -103,12 +106,12 @@ export default function Ejercicio1() {
       if (newGameLevel == 1) {
         
         newGameLevel = 2;
-        setGameTable([4,4]);
+        setGameTable({rows: 4, cols: 4});
 
       }else if(newGameLevel == 2){
 
         newGameLevel = 3;
-        setGameTable([3,4]);
+        setGameTable({rows: 3, cols: 4});
         setRicksAmountToMatch(3);
       }
 
@@ -126,7 +129,7 @@ export default function Ejercicio1() {
 
   const setUpTable = async () => {
 
-    const rickAPIData = await CallAPI(`https://rickandmortyapi.com/api/character/${getRandomCharactersID((gameTable[0] * gameTable[1]) / 2)}`);      
+    const rickAPIData = await CallAPI(`https://rickandmortyapi.com/api/character/${getRandomCharactersID((gameTable.rows * gameTable.cols) / ricksAmountToMatch)}`);      
 
     if (rickAPIData != null) {
       
@@ -144,24 +147,29 @@ export default function Ejercicio1() {
   }
 
   const getBoardContent = (ricks) => {
+    
+    let multipleRicks = ricks.concat(ricks);
 
-    const doubleRicks = ricks.concat(ricks);
+    if (gameLevel == 3) {
+      
+      multipleRicks = multipleRicks.concat(ricks);
+    }
 
-    doubleRicks.sort(() => Math.random() - 0.5);
+    multipleRicks.sort(() => Math.random() - 0.5);
 
     let boardContent = [];
 
     let currentRick = 0;
 
-    for (let i = 0; i < gameTable[0]; i++) {
+    for (let i = 0; i < gameTable.rows; i++) {
 
       let rowContent = [];
       
-      for (let j = 0; j < gameTable[1]; j++) {
+      for (let j = 0; j < gameTable.cols; j++) {
         
         rowContent.push({
-          "id": doubleRicks[currentRick].id,
-          "url": doubleRicks[currentRick].image
+          "id": multipleRicks[currentRick].id,
+          "url": multipleRicks[currentRick].image
         });
 
         currentRick++;
@@ -174,7 +182,7 @@ export default function Ejercicio1() {
   }
 
   const handleOnPress = async () => {
-
+    
     await setUpTable();
   }
 
