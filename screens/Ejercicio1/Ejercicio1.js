@@ -75,6 +75,20 @@ export default function Ejercicio1() {
         
   }, [chosenRicksIDs]);
 
+  useEffect(() => {
+
+    const checkGameLevel = async () => {
+
+      if (gameLevel > 1) {
+      
+        await setUpTable();
+      }
+    }
+
+    checkGameLevel();
+
+  }, [gameLevel]);
+
   const resetLevelStates = () => {
 
     setChosenRicksIDs([]);
@@ -116,8 +130,6 @@ export default function Ejercicio1() {
       }
 
       setGameLevel(newGameLevel);
-
-      alert(`Felicidades! A por el nivel ${newGameLevel}`);
 
     }else{
 
