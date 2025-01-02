@@ -59,7 +59,7 @@ const STYLES = StyleSheet.create({
   tinyPhotoHidden: {
     width: 80,
     height: 80,
-    //display: "none"
-    opacity: 0.5
+    display: "none",
+    //opacity: 0.5
   }
 });
