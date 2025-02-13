@@ -1,19 +1,21 @@
-import { View, Button, StyleSheet, Text, TextInput, Pressable, Image } from 'react-native';
+import { View, Button, StyleSheet, Text, TextInput, Pressable, Image, ScrollView } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
+
+import Context from '../Context';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function Ejercicio2() {
+export default function First(props) {
 
   const [permision, setPermision] = useCameraPermissions();
   const [cameraType, setCameraType] = useState('back');
 
-  const [photo, setPhoto] = useState(null);
-  
-  const camera = useRef(null);
-
   const [startShooting, setStartShooting] = useState(false);
+
+  const {photoSet, setPhotoSet} = useContext(Context);
+
+  const camera = useRef(null);
 
   if (!permision) {
     return <></>;
@@ -32,7 +34,12 @@ export default function Ejercicio2() {
       
     const options = { quality: 0.5, base64: true };
     const img = await camera.current.takePictureAsync(options);
-    setPhoto(img.uri);
+
+    let newPhotoSet = [...photoSet];
+
+    newPhotoSet.push(img.uri);    
+
+    setPhotoSet(newPhotoSet);
 
     setStartShooting(false);
   }
@@ -66,11 +73,7 @@ export default function Ejercicio2() {
     return (
       <View style={styles.container}>
         <Button onPress={() => setStartShooting(true)} title="Start Shooting" />
-        {photo != null ? (
-          <Image width="100%" height="50%" source={{ uri: photo }}/>
-        ) : (
-          <></>
-        )}
+        <Button onPress={() => props.navigation.navigate('Second')} title="Gallery" />
       </View>
     );
   }
