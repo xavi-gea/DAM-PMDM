@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { Video } from 'expo-av';
+import { Audio, Video } from 'expo-av';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 
 export default function Ejercicio5() {
@@ -33,6 +33,8 @@ export default function Ejercicio5() {
   }
 
   async function takeVideo() {
+
+    await Audio.requestPermissionsAsync();
     
     if (camera.current) {
 
@@ -49,6 +51,7 @@ export default function Ejercicio5() {
   }
 
   async function stopVideo() {
+
     camera.current.stopRecording();
     setCam(!cam);
     setShooting(!shooting);
@@ -71,13 +74,15 @@ export default function Ejercicio5() {
             style={styles.buttonText}
           >
             <Text style={{ fontSize: 25, color: 'white' }}>
-              Start Recording
+              Start Record
             </Text>
           </Pressable>
-          <Video 
+          <Video
             ref={camera}
             style={styles.video}
-            source={{uri: video}}
+            source={{
+            uri: video,
+            }}
             useNativeControls
             resizeMode="contain"
             isLooping
@@ -122,6 +127,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 50,
+  },
+  video: {
+    width: 200,
+    height: 200
   },
   camera: { flex: 1 },
   buttonContainer: {
