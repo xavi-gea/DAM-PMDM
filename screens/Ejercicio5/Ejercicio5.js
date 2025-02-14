@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Button } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Audio, Video } from 'expo-av';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
@@ -10,7 +10,6 @@ export default function Ejercicio5() {
   const [type, setType] = useState('back');
   const [video, setVideo] = useState();
   const [shooting, setShooting] = useState(false);
-  const [cam, setCam] = useState(true);
   const [status, setStatus] = useState({});
 
   const camera = useRef(null);
@@ -20,6 +19,7 @@ export default function Ejercicio5() {
   }
 
   if (!permission.granted) {
+
     return(
       <View style={styles.container}>
         <Text style={{ textAlign: 'center' }}>
@@ -33,12 +33,12 @@ export default function Ejercicio5() {
   }
 
   async function takeVideo() {
-
-    await Audio.requestPermissionsAsync();
     
     if (camera.current) {
-
+      
       try {
+        
+        await Audio.requestPermissionsAsync();
 
         const data = await camera.current.recordAsync();
         setVideo(data.uri);
@@ -53,44 +53,13 @@ export default function Ejercicio5() {
   async function stopVideo() {
 
     camera.current.stopRecording();
-    setCam(!cam);
     setShooting(!shooting);
   }
 
-  return(
-
-    <View style={styles.container}>
-      {cam && (
-        <View
-          style={{
-          flex: 1,
-          justifyContent: 'center',
-          backgroundColor: '#ecf0f1',
-          padding: 10,
-        }}>
-
-          <Pressable 
-            onPress={() => [setShooting(!shooting), setCam(!cam)]}
-            style={styles.buttonText}
-          >
-            <Text style={{ fontSize: 25, color: 'white' }}>
-              Start Record
-            </Text>
-          </Pressable>
-          <Video
-            ref={camera}
-            style={styles.video}
-            source={{
-            uri: video,
-            }}
-            useNativeControls
-            resizeMode="contain"
-            isLooping
-            onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-          />
-        </View>
-      )}
-      {shooting && (
+  if (shooting) {
+    
+    return(
+      <View style={styles.container}>
         <CameraView
           style={styles.camera} 
           ref={camera} 
@@ -118,9 +87,36 @@ export default function Ejercicio5() {
             </Pressable>
           </View>
         </CameraView>
-      )}
-    </View>
-  );
+      </View>
+    );
+
+  }else{
+
+    return(
+      <View style={styles.container}>
+        <View
+          style={{
+          flex: 1,
+          justifyContent: 'center',
+          backgroundColor: '#ecf0f1',
+          padding: 10,
+        }}>
+          <Button onPress={() => setShooting(!shooting)} title="Start Shooting" />
+          <Video
+            ref={camera}
+            style={styles.video}
+            source={{
+            uri: video,
+            }}
+            useNativeControls
+            resizeMode="contain"
+            isLooping
+            onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          />
+        </View>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
